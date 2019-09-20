@@ -1,0 +1,14 @@
+
+0000-3FFF   cpu0
+4000-7FFF   spchip
+8000-9FFF   cpu1
+A000-AFFF   cpu2
+B000-BFFF   bgscrn
+C000-CFFF   bgchip
+D000-D7FF   fgchip
+D800-D8FF   wave
+D900-D9FF   spclut
+DA00-DAFF   bgclut
+DB00-DB1F   palet
+
+[EOF]
