@@ -27,7 +27,8 @@
 --
 -- Joystick support.
 -- 
--- 
+--
+-- FIXED: wrong aspect ratio in "Vert" mode. 
 ---------------------------------------------------------------------------------
 
                                 *** Attention ***
