@@ -123,7 +123,7 @@ wire [4:0] CMIX = SPCOL[4] ? {1'b1,SPCOL[3:0]} : FGCOL[4] ? {1'b0,FGCOL[3:0]} : 
 
 DLROM #(5,8) palet( VCLK, CMIX, POUT, ROMCL,ROMAD[4:0],ROMDT,ROMEN & (ROMAD[15:5]=={8'hDB,3'b000}) );
 assign PCLK = ~VCLK;
-assign VBLK = (PH<16)&(PV==224);
+assign VBLK = (PH<64)&(PV==224);
 
 endmodule
 
