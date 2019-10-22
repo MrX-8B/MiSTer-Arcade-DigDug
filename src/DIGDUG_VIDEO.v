@@ -49,8 +49,8 @@ wire VCLK   = clkdiv[2];
 //---------------------------------------
 reg [8:0] PH, PV;
 always@( posedge VCLK ) begin
-	PH <= POSH-1;
-	PV <= POSV-2;
+	PH <= POSH+1;
+	PV <= POSV+(POSH>=504);
 end
 
 

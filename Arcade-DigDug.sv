@@ -4,8 +4,6 @@
 //  Original implimentation and port to MiSTer by MiSTer-X 2019
 //============================================================================
 
-//`define ALLOW_COIN
-
 module emu
 (
 	//Master input clock
@@ -88,11 +86,7 @@ localparam CONF_STR = {
 	"OH,Service Mode,Off,On;",
 	"-;",
 	"R0,Reset;",
-`ifdef ALLOW_COIN
 	"J1,Pump,Start 1P,Start 2P,Coin;",
-`else
-	"J1,Pump,Start 1P,Start 2P;",
-`endif
 	"V,v",`BUILD_DATE
 };
 
@@ -173,6 +167,7 @@ always @(posedge clk_sys) begin
 			'h023: btn_left_2      <= pressed; // D
 			'h034: btn_right_2     <= pressed; // G
 			'h01C: btn_fire_2      <= pressed; // A
+			'h01B: btn_fire_2      <= pressed; // S
 		endcase
 	end
 end
@@ -202,24 +197,19 @@ wire m_up2     = btn_up_2    | joystk2[3];
 wire m_down2   = btn_down_2  | joystk2[2];
 wire m_left2   = btn_left_2  | joystk2[1];
 wire m_right2  = btn_right_2 | joystk2[0];
-wire m_pump2   = btn_fire_2  | joystk2[4];
+wire m_trig2   = btn_fire_2  | joystk2[4];
 
-wire m_start1  = btn_one_player  | joystk1[5] | joystk2[5];
-wire m_start2  = btn_two_players | joystk1[6] | joystk2[6];
+wire m_start1  = btn_one_player  | joystk1[5] | joystk2[5] | btn_start_1;
+wire m_start2  = btn_two_players | joystk1[6] | joystk2[6] | btn_start_2;
 
 wire m_up1     = btn_up      | joystk1[3] | (bCabinet ? 1'b0 : m_up2);
 wire m_down1   = btn_down    | joystk1[2] | (bCabinet ? 1'b0 : m_down2);
 wire m_left1   = btn_left    | joystk1[1] | (bCabinet ? 1'b0 : m_left2);
 wire m_right1  = btn_right   | joystk1[0] | (bCabinet ? 1'b0 : m_right2);
-wire m_pump1   = btn_fire    | joystk1[4] | (bCabinet ? 1'b0 : m_pump2);
+wire m_trig1   = btn_fire    | joystk1[4] | (bCabinet ? 1'b0 : m_trig2);
 
-`ifdef ALLOW_COIN
-wire m_coin1   = btn_coin_1  | joystk1[7];
-wire m_coin2   = btn_coin_2  | joystk2[7];
-`else
-wire m_coin1   = m_start1    | m_start2;
-wire m_coin2   = 1'b0;
-`endif
+wire m_coin1   = btn_one_player | btn_coin_1 | joystk1[7];
+wire m_coin2   = btn_two_players| btn_coin_2 | joystk2[7];
 
 
 ///////////////////////////////////////////////////
@@ -273,16 +263,6 @@ assign AUDIO_S = 0; // unsigned PCM
 
 wire	iRST = RESET | status[0] | buttons[1] | ioctl_download;
 
-wire ORIENT = status[2];
-
-function [3:0] STKROT;
-input O;
-input [3:0] STK;
-
-	STKROT = O ? {STK[2],STK[1],STK[0],STK[3]} : STK;
-
-endfunction
-
 wire  [1:0] COIA = 2'b00;			// 1coin/1credit
 wire  [2:0] COIB = 3'b001;			// 1coin/1credit
 wire			CABI = ~bCabinet;
@@ -297,8 +277,8 @@ wire     SERVICE = status[17];
 
 wire  [7:0] DSW0 = {LIFE,EXMD,COIB};
 wire  [7:0] DSW1 = {COIA,FRZE,DSND,CONT,CABI,DIFC};
-wire  [7:0] INP0 = {SERVICE, 1'b0, m_coin2, m_coin1, m_start2, m_start1, m_pump2, m_pump1 };
-wire  [7:0] INP1 = {STKROT(ORIENT,{m_left2, m_down2, m_right2, m_up2}), STKROT(ORIENT,{m_left1, m_down1, m_right1, m_up1}) };
+wire  [7:0] INP0 = {SERVICE, 1'b0, m_coin2, m_coin1, m_start2, m_start1, m_trig2, m_trig1 };
+wire  [7:0] INP1 = {m_left2, m_down2, m_right2, m_up2, m_left1, m_down1, m_right1, m_up1 };
 
 wire  [7:0] oPIX;
 wire  [7:0] oSND;
@@ -340,21 +320,21 @@ assign VPOS = vcnt;
 
 always @(posedge PCLK) begin
 	case (hcnt)
-		289: begin HBLK <= 1; HSYN <= 0; hcnt <= hcnt+1; end
-		311: begin HSYN <= 1; hcnt <= hcnt+1; end
-		383: begin
-			HBLK <= 0; HSYN <= 1; hcnt <= 0;
+		288: begin HBLK <= 1; hcnt <= hcnt+1; end
+		311: begin HSYN <= 0; hcnt <= hcnt+1; end
+		342: begin HSYN <= 1; hcnt <= 471;    end
+		511: begin HBLK <= 0; hcnt <= 0;
 			case (vcnt)
 				223: begin VBLK <= 1; vcnt <= vcnt+1; end
 				226: begin VSYN <= 0; vcnt <= vcnt+1; end
-				233: begin VSYN <= 1; vcnt <= vcnt+1; end
-				262: begin VBLK <= 0; vcnt <= 0; end
+				233: begin VSYN <= 1; vcnt <= 483;	  end
+				511: begin VBLK <= 0; vcnt <= 0;		  end
 				default: vcnt <= vcnt+1;
 			endcase
 		end
 		default: hcnt <= hcnt+1;
 	endcase
-	oRGB <= (HBLK|VBLK|(hcnt==0)) ? 12'h0 : iRGB;
+	oRGB <= (HBLK|VBLK) ? 12'h0 : iRGB;
 end
 
 endmodule

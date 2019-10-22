@@ -22,13 +22,30 @@
 --   F2          : Coin + Start 2 players
 --   F1          : Coin + Start 1 player
 --   UP,DOWN,LEFT,RIGHT arrows : Movements
---   SPACE,CTRL  : Pump
+--   SPACE/CTRL  : Pump
+--
+-- MAME/IPAC/JPAC Style Keyboard inputs:
+--   5           : Coin 1
+--   6           : Coin 2
+--   1           : Start 1 Player
+--   2           : Start 2 Players
+--   R,F,D,G     : Player 2 Movements
+--   A/S         : Player 2 Pump
 --
 --
 -- Joystick support.
 -- 
---
--- FIXED: wrong aspect ratio in "Vert" mode. 
+-- 
+---------------------------------------------------------------------------------
+-- 21 September 2019
+---------------------------------------------------------------------------------
+--   FIXED: wrong aspect ratio in "Vert" mode. 
+---------------------------------------------------------------------------------
+-- 22 October 2019
+---------------------------------------------------------------------------------
+--   FIXED: Little problem with CRT and HDMI.
+-- CHANGED: Keyboard inputs.
+--          Abolished rotation of control direction in Horz mode.
 ---------------------------------------------------------------------------------
 
                                 *** Attention ***

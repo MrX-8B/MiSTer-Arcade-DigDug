@@ -1,0 +1,9 @@
+
+*.bak
+db/*
+incremental_db/*
+output_files/*
+build_id.v
+jtag.cdf
+c5_pin_model_dump.txt
+*.qws
