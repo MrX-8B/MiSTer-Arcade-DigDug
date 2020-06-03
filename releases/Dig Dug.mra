@@ -1,0 +1,30 @@
+<misterromdescription>
+	<name>Dig Dug (rev 2)</name>
+	<mameversion>0220</mameversion>
+	<setname>digdug</setname>
+	<mratimestamp>20200427161917</mratimestamp>
+	<year>1982</year>
+	<manufacturer>Namco</manufacturer>
+	<category>Maze / Digging</category>
+	<rbf>digdug</rbf>
+	<rom index="0" zip="digdug.zip" md5="d6790fb2893b2290b4ac74544e4d78e6">
+		<part crc="a80ec984" name="dd1a.1"/>
+		<part crc="559f00bd" name="dd1a.2"/>
+		<part crc="8cbc6fe1" name="dd1a.3"/>
+		<part crc="d066f830" name="dd1a.4"/>
+		<part crc="e22957c8" name="dd1.15"/>
+		<part crc="2829ec99" name="dd1.14"/>
+		<part crc="458499e9" name="dd1.13"/>
+		<part crc="c58252a0" name="dd1.12"/>
+		<part crc="6687933b" name="dd1a.5"/>
+		<part crc="843d857f" name="dd1a.6"/>
+		<part crc="a41bce72" name="dd1.7"/>
+		<part crc="2cf399c2" name="dd1.10b"/>
+		<part crc="7b383983" name="dd1.11"/>
+		<part crc="f14a6fe1" name="dd1.9"/>
+		<part crc="7a2815b4" name="136007.110"/>
+		<part crc="00c7c419" name="136007.111"/>
+		<part crc="e9b3e08e" name="136007.112"/>
+		<part crc="4cb9da99" name="136007.113"/>
+	</rom>
+</misterromdescription>
